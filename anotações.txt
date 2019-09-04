@@ -1,0 +1,42 @@
+URI com recurso único: instancia
+URI com + recursos: coleção
+	Coleções e recursos:
+		Limit:
+			limite elementos
+		Offset:
+			pular offset elementos
+		exemplo:	
+			/postagens?anp=2018&limit=10&offset=30
+
+CRUD: create read update delete
+Status codes:
+	200: succes
+	500: server erro
+	404: not found
+
+header:
+	content-type: tipo de metadados que espera o tipo do dado que espera do servidor
+	ex:	
+		text/xml
+		application/json
+python --version
+alias python=python3.7
+Criar env:
+	pip install virtualenv
+	virtualenv <nome_da_pasta> --python=python3.7
+	source restapi/Scripts/activate
+
+resources:
+	codigos adicionais, para refatorar o app.py
+	fazer um __init__.py, pois assim a posta será considerada um módulo
+	fazer o add_resource com classes como Hoteis, que estão dentro de uma pasta(modulo tb) (from resources.hotel import Hoteis)
+	
+
+
+
+	
+	
+	
+
+
+
