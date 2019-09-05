@@ -33,6 +33,411 @@ resources:
 	
 
 
+ex:
+curl -X POST \
+  http://127.0.0.1:5000/hoteis/audiohotel \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 126' \
+  -H 'Content-Type: application/json' \
+  -H 'Host: 127.0.0.1:5000' \
+  -H 'Postman-Token: 2e21c3e5-ab51-432d-8793-d230b463c873,333dcb0d-6c63-49e6-ba1d-6d2250f01a27' \
+  -H 'User-Agent: PostmanRuntime/7.16.3' \
+  -H 'cache-control: no-cache' \
+  -d '{
+    "nome": "audiohotel",
+    "estrelas": 4.123456,
+    "diaria": 380.9,
+    "cidade": "Santa Catarina",
+    "audio": 1123
+}'
+
+curl -X PUT \
+  http://127.0.0.1:5000/hoteis/new2 \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -H 'Host: 127.0.0.1:5000' \
+  -H 'cache-control: no-cache' \
+  -d '{
+    "nome": 10,
+    "estrelas": 4.444,
+    "diaria": 380.9,
+    "cidade": "Santa Catarina",
+    "audio": "1200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034"
+}'
+
+exemplo microsoft
+
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "InvalidPhrase"
+  }
+}
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "InvalidPhrase"
+  }
+}
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "InvalidPhrase"
+  }
+}
+[
+  {
+    "phrase": "i am going to make him an offer he cannot refuse"
+  },
+  {
+    "phrase": "houston we have had a problem"
+  },
+  {
+    "phrase": "my voice is my passport verify me"
+  },
+  {
+    "phrase": "apple juice tastes funny after toothpaste"
+  },
+  {
+    "phrase": "you can get in without your password"
+  },
+  {
+    "phrase": "you can activate security system now"
+  },
+  {
+    "phrase": "my voice is stronger than passwords"
+  },
+  {
+    "phrase": "my password is not your business"
+  },
+  {
+    "phrase": "my name is unknown to you"
+  },
+  {
+    "phrase": "be yourself everyone else is already taken"
+  }
+]
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "SpeechNotRecognized"
+  }
+}
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "InvalidPhrase"
+  }
+}
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "InvalidPhrase"
+  }
+}
+I'm listening... say one of the predefined phrases...
+...working...
+Verification enrollments remaining: undefined
+enrolling
+{
+  "enrollmentStatus": "Enrolled",
+  "enrollmentsCount": 3,
+  "remainingEnrollments": 0,
+  "phrase": "be yourself everyone else is already taken"
+}
+Verification should be enabled!
+I'm listening... say your predefined phrase...
+...working...
+verifying profile
+{
+  "result": "Reject",
+  "confidence": "Normal",
+  "phrase": ""
+}
+I'm listening... say your predefined phrase...
+...working...
+verifying profile
+{
+  "result": "Reject",
+  "confidence": "Normal",
+  "phrase": ""
+}
+I'm listening... say your predefined phrase...
+...working...
+verifying profile
+{
+  "result": "Reject",
+  "confidence": "Normal",
+  "phrase": ""
+}
+I'm listening... say your predefined phrase...
+...working...
+verifying profile
+{
+  "result": "Accept",
+  "confidence": "Normal",
+  "phrase": "be yourself everyone else is already taken"
+}
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+They're the world's most fearsome fighting team 
+	They're heroes in a half-shell and they're green
+	When the evil Shredder attacks
+	These Turtle boys don't cut him no slack! 
+	Teenage Mutant Ninja Turtles
+Teenage Mutant Ninja Turtles
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+If you're seein' things runnin' thru your head 
+	Who can you call (ghostbusters)
+	An' invisible man sleepin' in your bed 
+	Oh who ya gonna call (ghostbusters) 
+I ain't afraid a no ghost 
+	I ain't afraid a no ghost 
+	Who ya gonna call (ghostbusters) 
+	If you're all alone pick up the phone 
+	An call (ghostbusters)
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+There's a voice that keeps on calling me
+	Down the road, that's where I'll always be.
+	Every stop I make, I make a new friend,
+	Can't stay for long, just turn around and I'm gone again
+	
+	Maybe tomorrow, I'll want to settle down,
+	Until tomorrow, I'll just keep moving on.
+	
+	Down this road that never seems to end,
+	Where new adventure lies just around the bend.
+	So if you want to join me for a while,
+	Just grab your hat, come travel light, that's hobo style.
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+There's a voice that keeps on calling me
+	Down the road, that's where I'll always be.
+	Every stop I make, I make a new friend,
+	Can't stay for long, just turn around and I'm gone again
+	
+	Maybe tomorrow, I'll want to settle down,
+	Until tomorrow, I'll just keep moving on.
+	
+	Down this road that never seems to end,
+	Where new adventure lies just around the bend.
+	So if you want to join me for a while,
+	Just grab your hat, come travel light, that's hobo style.
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+They're the world's most fearsome fighting team 
+	They're heroes in a half-shell and they're green
+	When the evil Shredder attacks
+	These Turtle boys don't cut him no slack! 
+	Teenage Mutant Ninja Turtles
+Teenage Mutant Ninja Turtles
+...working...
+creating profile
+{
+  "identificationProfileId": "0cdd2cb2-f543-4309-a528-905a498166a2"
+}
+enrolling
+
+getting status
+{
+  "status": "succeeded",
+  "createdDateTime": "2019-09-05T00:34:35.7820683Z",
+  "lastActionDateTime": "2019-09-05T00:34:36.7116454Z",
+  "processingResult": {
+    "enrollmentStatus": "Enrolling",
+    "remainingEnrollmentSpeechTime": 0.43,
+    "speechTime": 0.57,
+    "enrollmentSpeechTime": 0.57
+  }
+}
+That audio wasn't long enough to use
+...working...
+creating profile
+{
+  "identificationProfileId": "3b0432c0-ef32-47a3-8259-85b87b4715a1"
+}
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "Audio too short"
+  }
+}
+Ugh. I can't poll, it's all gone wrong.
+...working...
+creating profile
+{
+  "identificationProfileId": "a97c6dee-2c81-41d6-b94f-aef2f322e0ac"
+}
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "Audio too short"
+  }
+}
+Ugh. I can't poll, it's all gone wrong.
+...working...
+creating profile
+{
+  "identificationProfileId": "e071e8cd-395c-4d79-a948-1a190ccbad5d"
+}
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "Audio too short"
+  }
+}
+Ugh. I can't poll, it's all gone wrong.
+...working...
+creating profile
+{
+  "identificationProfileId": "002c423a-2762-4a9c-8c25-215d2b6b3351"
+}
+enrolling
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "Audio too short"
+  }
+}
+Ugh. I can't poll, it's all gone wrong.
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+There's a voice that keeps on calling me
+	Down the road, that's where I'll always be.
+	Every stop I make, I make a new friend,
+	Can't stay for long, just turn around and I'm gone again
+	
+	Maybe tomorrow, I'll want to settle down,
+	Until tomorrow, I'll just keep moving on.
+	
+	Down this road that never seems to end,
+	Where new adventure lies just around the bend.
+	So if you want to join me for a while,
+	Just grab your hat, come travel light, that's hobo style.
+...working...
+creating profile
+{
+  "identificationProfileId": "6ddc8ff3-41c0-4af8-b180-8f48b063d818"
+}
+enrolling
+
+getting status
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:07.3886184Z",
+  "lastActionDateTime": "2019-09-05T00:35:07.6592936Z"
+}
+Not done yet..
+getting status
+{
+  "status": "succeeded",
+  "createdDateTime": "2019-09-05T00:35:07.3886184Z",
+  "lastActionDateTime": "2019-09-05T00:35:08.791307Z",
+  "processingResult": {
+    "enrollmentStatus": "Enrolled",
+    "remainingEnrollmentSpeechTime": 0.0,
+    "speechTime": 9.72,
+    "enrollmentSpeechTime": 9.72
+  }
+}
+enrollment complete!
+6ddc8ff3-41c0-4af8-b180-8f48b063d818 is now mapped to victor
+I'm listening... just start talking for a few seconds...
+Maybe read this: 
+There's a voice that keeps on calling me
+	Down the road, that's where I'll always be.
+	Every stop I make, I make a new friend,
+	Can't stay for long, just turn around and I'm gone again
+	
+	Maybe tomorrow, I'll want to settle down,
+	Until tomorrow, I'll just keep moving on.
+	
+	Down this road that never seems to end,
+	Where new adventure lies just around the bend.
+	So if you want to join me for a while,
+	Just grab your hat, come travel light, that's hobo style.
+...working...
+identifying profile
+
+getting status
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+still thinking..
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+getting status
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+still thinking..
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+getting status
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+still thinking..
+{
+  "status": "running",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:39.7492721Z"
+}
+getting status
+{
+  "status": "succeeded",
+  "createdDateTime": "2019-09-05T00:35:39.0026587Z",
+  "lastActionDateTime": "2019-09-05T00:35:40.7053144Z",
+  "processingResult": {
+    "identifiedProfileId": "6ddc8ff3-41c0-4af8-b180-8f48b063d818",
+    "confidence": "High"
+  }
+}
+I think victor was talking
 
 	
 	
