@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.hotel import HotelModel
-
+import numpy as np
 hoteis = [
         {
         'hotel_id': 'alpha',
@@ -37,7 +37,7 @@ class Hotel(Resource):
     argumentos.add_argument('estrelas', type=float, required=True,help="This field 'estrelas' cannot be left blank"  )
     argumentos.add_argument('diaria')
     argumentos.add_argument('cidade')
-    argumentos.add_argument('audio', type = str)
+    argumentos.add_argument('audio', type = bytes)
         
 
 
@@ -56,6 +56,10 @@ class Hotel(Resource):
             return {'message':"Hotel id {} already exists.".format(hotel_id)}, 400 # Bad Request
         # captura atributos
         dados = self.argumentos.parse_args()
+        
+        ## TODO trocar aqui por um d_vector
+        ## usar array.tobytes() e depois np.frombuffer(s)
+        dados['audio'] = np.random.randn(10).tobytes()
         # instanciando  novo hotel
         hotel = HotelModel(hotel_id, **dados)
         try:

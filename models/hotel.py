@@ -7,7 +7,7 @@ class HotelModel(banco.Model):
     __tablename__ = 'hoteis'
     hotel_id = banco.Column(banco.String, primary_key=True)
     nome = banco.Column(banco.String(80)) # 80 tamanho sting
-    estrelas = banco.Column(banco.Float(precision=1))
+    estrelas = banco.Column(banco.Float(precision=2))
     diaria = banco.Column(banco.Float(precision=2))
     cidade = banco.Column(banco.String(40))
     audio = banco.Column(banco.String(8000))
@@ -52,5 +52,6 @@ class HotelModel(banco.Model):
             'estrelas': self.estrelas,
             'diaria': self.diaria,
             'cidade': self.cidade,
-            'audio':self.audio
+            #não retornar aqui pois não é serializavel
+            #'audio':self.audio
         }
