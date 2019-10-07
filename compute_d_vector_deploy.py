@@ -163,29 +163,122 @@ test_flag=1
 d_vector_dim=fc_lay[-1]
 d_vect_dict={}
 
-   
-with torch.no_grad(): 
-    
-    for i in range(snt_te):
-           
-         [signal, fs] = sf.read(data_folder+'/'+wav_lst_te[i])
-         
-         # Amplitude normalization
-         signal=signal/np.max(np.abs(signal))
+def compute_path():
+    with torch.no_grad(): 
         
-         signal=torch.from_numpy(signal).float().to(device).contiguous()
+        for i in range(snt_te):
+            
+            [signal, fs] = sf.read(data_folder+'/'+wav_lst_te[i])
+            
+            # Amplitude normalization
+            signal=signal/np.max(np.abs(signal))
+            
+            signal=torch.from_numpy(signal).float().to(device).contiguous()
+            
+            if avoid_small_en_fr: 
+                # computing energy on each frame:
+                beg_samp=0
+                end_samp=wlen
         
-         if avoid_small_en_fr: 
-             # computing energy on each frame:
-             beg_samp=0
-             end_samp=wlen
+                N_fr=int((signal.shape[0]-wlen)/(wshift))
+                Batch_dev=N_fr
+                en_arr=torch.zeros(N_fr).float().contiguous().to(device)
+                count_fr=0
+                count_fr_tot=0
+                while end_samp<signal.shape[0]:
+                    en_arr[count_fr]=torch.sum(signal[beg_samp:end_samp].pow(2))
+                    beg_samp=beg_samp+wshift
+                    end_samp=beg_samp+wlen
+                    count_fr=count_fr+1
+                    count_fr_tot=count_fr_tot+1
+                    if count_fr==N_fr:
+                        break
+        
+                en_arr_bin=en_arr>torch.mean(en_arr)*0.1
+                en_arr_bin.to(device)
+                n_vect_elem=torch.sum(en_arr_bin)
+        
+                if n_vect_elem<10:
+                    print('only few elements used to compute d-vectors')
+                    sys.exit(0)
+
+
+
+            # split signals into chunks
+            beg_samp=0
+            end_samp=wlen
+            
+            N_fr=int((signal.shape[0]-wlen)/(wshift))
+            
+            
+            sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
+            dvects=Variable(torch.zeros(N_fr+1,d_vector_dim).float().to(device).contiguous()) # alterado +1
+            count_fr=0
+            count_fr_tot=0
+            while end_samp<signal.shape[0]:
+                sig_arr[count_fr,:]=signal[beg_samp:end_samp]
+                beg_samp=beg_samp+wshift
+                end_samp=beg_samp+wlen
+                count_fr=count_fr+1
+                count_fr_tot=count_fr_tot+1
+                if count_fr==Batch_dev:
+                    inp=Variable(sig_arr)
+                    dvects[count_fr_tot-Batch_dev:count_fr_tot,:]=DNN1_net(CNN_net(inp))
+                    count_fr=0
+                    sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
+            
+            if count_fr>0:
+                inp=Variable(sig_arr[0:count_fr]) 
+                dvects[count_fr_tot-count_fr:count_fr_tot,:]=DNN1_net(CNN_net(inp)) # alterado, nao tinha -1
+                
+                pout = DNN2_net(DNN1_net(CNN_net(inp)))#DNN1_net(CNN_net(inp)) # 
+                pred=torch.max(pout,dim=1)[1]
+            
+            
+            if avoid_small_en_fr:
+                dvects=dvects.index_select(0, (en_arr_bin==1).nonzero().view(-1))
+            
+            # averaging and normalizing all the d-vectors
+            d_vect_out=torch.mean(dvects/dvects.norm(p=2, dim=1).view(-1,1),dim=0)
+            
+            # checks for nan
+            nan_sum=torch.sum(torch.isnan(d_vect_out))
+
+            if nan_sum>0:
+                print(wav_lst_te[i])
+                sys.exit(0)
+
+            
+            # saving the d-vector in a numpy dictionary
+            #dict_key=wav_lst_te[i].split('/')[-2]+'/'+wav_lst_te[i].split('/')[-1] # alterado
+            dict_key=wav_lst_te[i]
+            d_vect_dict[dict_key]=pred #d_vect_out.cpu().numpy()
+            print(dict_key)
+
+    # Save the dictionary
+    np.save(out_dict_file, d_vect_dict)
+
+def compute(audio_name):
+    with torch.no_grad(): 
+              
+        [signal, fs] = sf.read(data_folder+'/'+audio_name)
+        
+        # Amplitude normalization
+        signal=signal/np.max(np.abs(signal))
+        
+        signal=torch.from_numpy(signal).float().to(device).contiguous()
+        
+        if avoid_small_en_fr: 
+            # computing energy on each frame:
+            beg_samp=0
+            end_samp=wlen
     
-             N_fr=int((signal.shape[0]-wlen)/(wshift))
-             Batch_dev=N_fr
-             en_arr=torch.zeros(N_fr).float().contiguous().to(device)
-             count_fr=0
-             count_fr_tot=0
-             while end_samp<signal.shape[0]:
+            N_fr=int((signal.shape[0]-wlen)/(wshift))
+            Batch_dev=N_fr
+            en_arr=torch.zeros(N_fr).float().contiguous().to(device)
+            count_fr=0
+            count_fr_tot=0
+            while end_samp<signal.shape[0]:
                 en_arr[count_fr]=torch.sum(signal[beg_samp:end_samp].pow(2))
                 beg_samp=beg_samp+wshift
                 end_samp=beg_samp+wlen
@@ -194,69 +287,77 @@ with torch.no_grad():
                 if count_fr==N_fr:
                     break
     
-             en_arr_bin=en_arr>torch.mean(en_arr)*0.1
-             en_arr_bin.to(device)
-             n_vect_elem=torch.sum(en_arr_bin)
+            en_arr_bin=en_arr>torch.mean(en_arr)*0.1
+            en_arr_bin.to(device)
+            n_vect_elem=torch.sum(en_arr_bin)
     
-             if n_vect_elem<10:
-                 print('only few elements used to compute d-vectors')
-                 sys.exit(0)
+            if n_vect_elem<10:
+                print('only few elements used to compute d-vectors')
+                sys.exit(0)
 
 
 
-         # split signals into chunks
-         beg_samp=0
-         end_samp=wlen
-         
-         N_fr=int((signal.shape[0]-wlen)/(wshift))
-         
+        # split signals into chunks
+        beg_samp=0
+        end_samp=wlen
         
-         sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
-         dvects=Variable(torch.zeros(N_fr+1,d_vector_dim).float().to(device).contiguous()) # alterado +1
-         count_fr=0
-         count_fr_tot=0
-         while end_samp<signal.shape[0]:
-             sig_arr[count_fr,:]=signal[beg_samp:end_samp]
-             beg_samp=beg_samp+wshift
-             end_samp=beg_samp+wlen
-             count_fr=count_fr+1
-             count_fr_tot=count_fr_tot+1
-             if count_fr==Batch_dev:
-                 inp=Variable(sig_arr)
-                 dvects[count_fr_tot-Batch_dev:count_fr_tot,:]=DNN1_net(CNN_net(inp))
-                 count_fr=0
-                 sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
-           
-         if count_fr>0:
-          inp=Variable(sig_arr[0:count_fr]) 
-          dvects[count_fr_tot-count_fr:count_fr_tot,:]=DNN1_net(CNN_net(inp)) # alterado, nao tinha -1
-          
-          pout = DNN2_net(DNN1_net(CNN_net(inp)))#DNN1_net(CNN_net(inp)) # 
-          pred=torch.max(pout,dim=1)[1]
+        N_fr=int((signal.shape[0]-wlen)/(wshift))
         
         
-         if avoid_small_en_fr:
-             dvects=dvects.index_select(0, (en_arr_bin==1).nonzero().view(-1))
-         
-         # averaging and normalizing all the d-vectors
-         d_vect_out=torch.mean(dvects/dvects.norm(p=2, dim=1).view(-1,1),dim=0)
-         
-         # checks for nan
-         nan_sum=torch.sum(torch.isnan(d_vect_out))
+        sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
+        dvects=Variable(torch.zeros(N_fr+1,d_vector_dim).float().to(device).contiguous()) # alterado +1
+        count_fr=0
+        count_fr_tot=0
+        while end_samp<signal.shape[0]:
+            sig_arr[count_fr,:]=signal[beg_samp:end_samp]
+            beg_samp=beg_samp+wshift
+            end_samp=beg_samp+wlen
+            count_fr=count_fr+1
+            count_fr_tot=count_fr_tot+1
+            if count_fr==Batch_dev:
+                inp=Variable(sig_arr)
+                dvects[count_fr_tot-Batch_dev:count_fr_tot,:]=DNN1_net(CNN_net(inp))
+                count_fr=0
+                sig_arr=torch.zeros([Batch_dev,wlen]).float().to(device).contiguous()
+        
+        if count_fr>0:
+            inp=Variable(sig_arr[0:count_fr]) 
+            dvects[count_fr_tot-count_fr:count_fr_tot,:]=DNN1_net(CNN_net(inp)) # alterado, nao tinha -1
+            
+            pout = DNN2_net(DNN1_net(CNN_net(inp)))#DNN1_net(CNN_net(inp)) # 
+            pred=torch.max(pout,dim=1)[1]
+            
+            
+        if avoid_small_en_fr:
+            dvects=dvects.index_select(0, (en_arr_bin==1).nonzero().view(-1))
+        
+        # averaging and normalizing all the d-vectors
+        d_vect_out=torch.mean(dvects/dvects.norm(p=2, dim=1).view(-1,1),dim=0)
+        
+        # checks for nan
+        nan_sum=torch.sum(torch.isnan(d_vect_out))
 
-         if nan_sum>0:
-             print(wav_lst_te[i])
-             sys.exit(0)
+        if nan_sum>0:
+            print(audio_name)
+            sys.exit(0)
 
-         
-         # saving the d-vector in a numpy dictionary
-         #dict_key=wav_lst_te[i].split('/')[-2]+'/'+wav_lst_te[i].split('/')[-1] # alterado
-         dict_key=wav_lst_te[i]
-         d_vect_dict[dict_key]=pred #d_vect_out.cpu().numpy()
-         print(dict_key)
+        
+        # saving the d-vector in a numpy dictionary
+        #dict_key=wav_lst_te[i].split('/')[-2]+'/'+wav_lst_te[i].split('/')[-1] # alterado
+        dict_key=audio_name
+        
+        #para retornar o spk
+        #d_vect_dict[dict_key]=pred 
 
-# Save the dictionary
-np.save(out_dict_file, d_vect_dict)
+        #para retornar o d_vector
+        d_vect_dict[dict_key] = d_vect_out.cpu().numpy()
+
+
+        print(dict_key)
+
+
+    # Save the dictionary
+    np.save(out_dict_file, d_vect_dict)
 
 
 from flask import Flask, render_template,request,url_for, jsonify
@@ -270,6 +371,7 @@ def predict():
     if not request.json or not 'rawtext_list' in request.json:
         abort(400)
     rawtext_list = request.json['rawtext_list']
+    compute(str(rawtext_list))
     response = {
         # Resposta é o spk gerado pela sincnet dado wav
         "output" : str(d_vect_dict[rawtext_list]), 
